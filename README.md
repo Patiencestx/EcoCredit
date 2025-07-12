@@ -1,19 +1,22 @@
 # EcoCredit 🌱
 
-A decentralized carbon credit trading platform built on Stacks blockchain, enabling transparent and verifiable carbon offset transactions.
+A decentralized carbon credit trading platform built on Stacks blockchain, enabling transparent and verifiable carbon offset transactions with automated oracle verification.
 
 ## Overview
 
-EcoCredit provides a trustless marketplace for carbon credits, allowing environmental projects to tokenize their carbon reduction efforts and enabling individuals and organizations to purchase verified carbon offsets directly on the blockchain.
+EcoCredit provides a trustless marketplace for carbon credits, allowing environmental projects to tokenize their carbon reduction efforts and enabling individuals and organizations to purchase verified carbon offsets directly on the blockchain. The platform now features automated verification through IoT sensors and satellite data integration.
 
 ## Features
 
 - **Project Registration**: Environmental projects can register and create verified carbon credit programs
 - **Credit Issuance**: Issue tokenized carbon credits with verification standards and vintage years
+- **Oracle Integration**: Automated verification using IoT sensors and satellite data
+- **Real-time Monitoring**: Continuous environmental impact tracking and validation
 - **Peer-to-Peer Trading**: Direct transfer of credits between users without intermediaries
 - **Credit Retirement**: Permanently retire credits to prevent double-counting
 - **Transparent Pricing**: Dynamic pricing controlled by project owners
-- **Verification Integration**: Support for multiple verification standards (VCS, Gold Standard, etc.)
+- **Multi-Oracle Verification**: Requires multiple oracle confirmations for enhanced security
+- **Reputation System**: Oracle providers are rated based on accuracy and reliability
 
 ## Smart Contract Functions
 
@@ -26,7 +29,15 @@ EcoCredit provides a trustless marketplace for carbon credits, allowing environm
 - `update-project-price` - Update credit pricing (project owners only)
 - `deactivate-project` - Deactivate a project (project owners only)
 
-### Read-Only Functions
+### Oracle Functions
+
+- `register-oracle` - Register IoT sensors or satellite data providers
+- `submit-oracle-data` - Submit environmental measurement data
+- `verify-oracle-data` - Verify submitted oracle data (admin only)
+- `issue-credits-with-oracle-verification` - Issue credits with oracle verification
+- `deactivate-oracle` - Deactivate unreliable oracle providers
+
+### Traditional Read-Only Functions
 
 - `get-project` - Retrieve project details
 - `get-credit` - Get carbon credit information
@@ -59,6 +70,7 @@ clarinet test
 
 ## Usage Example
 
+### Traditional Credit Issuance
 ```clarity
 ;; Register a new reforestation project
 (contract-call? .ecocredit register-project 
@@ -68,13 +80,44 @@ clarinet test
   "VCS"
   u1000000) ;; 1 STX per credit
 
-;; Issue 1000 carbon credits
+;; Issue 1000 carbon credits (traditional method)
 (contract-call? .ecocredit issue-credits 
   u1 
   u1000 
   u2024 
   "hash123abc456def789")
+```
 
+### Oracle-Verified Credit Issuance
+```clarity
+;; Register an IoT sensor oracle
+(contract-call? .ecocredit register-oracle 
+  "IoT"
+  'SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7)
+
+;; Submit sensor data for carbon sequestration
+(contract-call? .ecocredit submit-oracle-data
+  u1 ;; project-id
+  u1 ;; oracle-id
+  "carbon-sequestration"
+  u500 ;; 500 tons CO2
+  "tons-co2"
+  u95 ;; 95% confidence
+  "lat:40.7128,lng:-74.0060")
+
+;; Admin verifies the oracle data
+(contract-call? .ecocredit verify-oracle-data u1001)
+
+;; Issue credits with oracle verification
+(contract-call? .ecocredit issue-credits-with-oracle-verification
+  u1 
+  u500 
+  u2024 
+  "oracle-verified-hash123")
+```
+
+### Credit Trading
+```clarity
 ;; Transfer 100 credits to another user
 (contract-call? .ecocredit transfer-credits 
   u1 
@@ -84,21 +127,28 @@ clarinet test
 
 ## Real-World Impact
 
-EcoCredit addresses critical environmental challenges:
+EcoCredit with oracle integration addresses critical environmental challenges:
 
-- **Climate Action**: Provides transparent mechanism for carbon offset transactions
-- **Environmental Projects**: Enables direct funding for reforestation, renewable energy, and conservation
-- **Corporate Sustainability**: Facilitates corporate carbon neutrality goals
-- **Individual Offsetting**: Allows individuals to offset their carbon footprint
-- **Verification**: Integrates with established carbon credit standards
+- **Climate Action**: Provides transparent mechanism for carbon offset transactions with real-time verification
+- **Environmental Projects**: Enables direct funding for reforestation, renewable energy, and conservation with automated monitoring
+- **Data Integrity**: IoT sensors and satellite data ensure accurate environmental impact measurement
+- **Corporate Sustainability**: Facilitates corporate carbon neutrality goals with verifiable, real-time data
+- **Individual Offsetting**: Allows individuals to offset their carbon footprint with confidence in verification
+- **Scientific Accuracy**: Integrates with established carbon credit standards and modern measurement technologies
+- **Fraud Prevention**: Multi-oracle verification prevents fraudulent carbon credit claims
+- **Transparency**: All environmental data is recorded on-chain for complete transparency
 
 ## Security Features
 
-- Input validation on all parameters
+- Input validation on all parameters including oracle data
 - Proper error handling with descriptive error codes
-- Owner-only functions for project management
+- Owner-only functions for project and oracle management
 - Balance verification before transfers
 - Prevention of double-spending through retirement mechanism
+- Multi-oracle verification threshold for enhanced security
+- Reputation scoring for oracle providers
+- Confidence score validation for environmental measurements
+- Geolocation verification for data integrity
 
 ## Contributing
 
