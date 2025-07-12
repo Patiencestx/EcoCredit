@@ -158,5 +158,4 @@ EcoCredit with oracle integration addresses critical environmental challenges:
 4. Add comprehensive tests
 5. Submit a pull request
 
-
 *Building a sustainable future through blockchain technology* 🌍
